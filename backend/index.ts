@@ -3,6 +3,7 @@ import z from 'zod'
 import {tavily} from  '@tavily/core';
 import express from "express"
 import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from './prompt';
+import { prisma } from './db';
 
 const client = tavily({ apiKey: process.env.TAVILY_API_KEY });
 
@@ -10,6 +11,17 @@ const app = express()
 
 
 app.use(express.json())
+
+
+app.get("/conversations", async(req,res) => {
+
+})
+
+app.post("/conversation/:conversationId", async(req,res) => {
+
+})
+
+
 
 app.post("/purplexity_ask", async(req,res) => {
     const query = req.body.query
@@ -40,9 +52,13 @@ app.post("/purplexity_ask", async(req,res) => {
     res.write("--------------SOURCE---------------\n")
 
 
-    webSearchResult.forEach(result => res.write(JSON.stringify(result)))
+    res.write(JSON.stringify(webSearchResult.map(result => ({url: result.url}))))
     
     res.end();
+
+})
+
+app.post("/purplexity_ask/follow_up", async(req,res) => {
 
 })
 
