@@ -4,6 +4,9 @@ import {tavily} from  '@tavily/core';
 import express from "express"
 import { PROMPT_TEMPLATE, SYSTEM_PROMPT } from './prompt';
 import { prisma } from './db';
+import middleware from './middleware';
+import cors from "cors"
+
 
 const client = tavily({ apiKey: process.env.TAVILY_API_KEY });
 
@@ -11,19 +14,22 @@ const app = express()
 
 
 app.use(express.json())
+app.use(cors())
 
 
-app.get("/conversations", async(req,res) => {
+app.get("/conversations", middleware, async(req,res) => {
+    res.json({
+        userId: req.userId
+    })
+})
+
+app.post("/conversation/:conversationId", middleware, async(req,res) => {
 
 })
 
-app.post("/conversation/:conversationId", async(req,res) => {
-
-})
 
 
-
-app.post("/purplexity_ask", async(req,res) => {
+app.post("/purplexity_ask", middleware ,async(req,res) => {
     const query = req.body.query
 
     const webSearchResponse = await client.search(query, {
@@ -58,8 +64,8 @@ app.post("/purplexity_ask", async(req,res) => {
 
 })
 
-app.post("/purplexity_ask/follow_up", async(req,res) => {
+app.post("/purplexity_ask/follow_up", middleware , async(req,res) => {
 
 })
 
-app.listen(3000);
+app.listen(3001);

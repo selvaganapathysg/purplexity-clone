@@ -1,5 +1,6 @@
-import { createClient } from '@supabase/supabase-js'
-const supabase = createClient(process.env.VITE_SUPABASE_URL!, process.env.VITE_SUPABASE_PUBLISHABLE_KEY!)
+import { createClient } from "@/lib/client"
+
+const supabase = createClient();
 
 
 
@@ -13,11 +14,6 @@ export default function Auth(){
             provider: provider
           })
 
-          if(error){
-            alert("error while signing in")
-          }else{
-            alert("successfully signed in")
-          }
     }
     return(
         <div>
